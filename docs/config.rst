@@ -88,6 +88,15 @@ The following configuration values are used internally by Flask:
                                   :class:`datetime.timedelta` object.
                                   Starting with Flask 0.8 this can also be
                                   an integer representing seconds.
+``SESSION_REFRESH_EACH_REQUEST``  this flag controls how permanent
+                                  sessions are refreshed.  If set to `True`
+                                  (which is the default) then the cookie
+                                  is refreshed each request which
+                                  automatically bumps the lifetime.  If
+                                  set to `False` a `set-cookie` header is
+                                  only sent if the session is modified.
+                                  Non permanent sessions are not affected
+                                  by this.
 ``USE_X_SENDFILE``                enable/disable x-sendfile
 ``LOGGER_NAME``                   the name of the logger
 ``SERVER_NAME``                   the name and port number of the server.
@@ -146,7 +155,7 @@ The following configuration values are used internally by Flask:
                                   ascii-encoded JSON.  If this is set to
                                   ``False`` Flask will not encode to ASCII
                                   and output strings as-is and return
-                                  unicode strings.  ``jsonfiy`` will
+                                  unicode strings.  ``jsonify`` will
                                   automatically encode it in ``utf-8``
                                   then for transport for instance.
 ``JSON_SORT_KEYS``                By default Flask will serialize JSON
@@ -165,6 +174,12 @@ The following configuration values are used internally by Flask:
                                   if they are not requested by an
                                   XMLHttpRequest object (controlled by
                                   the ``X-Requested-With`` header)
+``TEMPLATES_AUTO_RELOAD``         Flask checks if template was modified each
+                                  time it is requested and reloads it if
+                                  necessary. But disk I/O is costly and it may
+                                  be viable to disable this feature by setting
+                                  this key to ``False``. This option does not
+                                  affect debug mode.
 ================================= =========================================
 
 .. admonition:: More on ``SERVER_NAME``
@@ -209,6 +224,12 @@ The following configuration values are used internally by Flask:
 
 .. versionadded:: 0.10
    ``JSON_AS_ASCII``, ``JSON_SORT_KEYS``, ``JSONIFY_PRETTYPRINT_REGULAR``
+
+.. versionadded:: 1.0
+   ``SESSION_REFRESH_EACH_REQUEST``
+
+.. versionadded:: 1.0
+   ``TEMPLATES_AUTO_RELOAD``
 
 Configuring from Files
 ----------------------

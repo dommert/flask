@@ -350,7 +350,7 @@ JSON Support
 Flask uses ``simplejson`` for the JSON implementation.  Since simplejson
 is provided both by the standard library as well as extension Flask will
 try simplejson first and then fall back to the stdlib json module.  On top
-of that it will delegate access to the current application's JSOn encoders
+of that it will delegate access to the current application's JSON encoders
 and decoders for easier customization.
 
 So for starters instead of doing::
@@ -365,7 +365,7 @@ You can instead just do this::
     from flask import json
 
 For usage examples, read the :mod:`json` documentation in the standard
-lirbary.  The following extensions are by default applied to the stdlib's
+library.  The following extensions are by default applied to the stdlib's
 JSON module:
 
 1.  ``datetime`` objects are serialized as :rfc:`822` strings.
@@ -384,6 +384,15 @@ you are using Flask 0.10 which implies that:
     <script type=text/javascript>
         doSomethingWith({{ user.username|tojson|safe }});
     </script>
+
+.. admonition:: Auto-Sort JSON Keys
+
+    The configuration variable ``JSON_SORT_KEYS`` (:ref:`config`) can be
+    set to false to stop Flask from auto-sorting keys.  By default sorting
+    is enabled and outside of the app context sorting is turned on.
+
+    Notice that disabling key sorting can cause issues when using content
+    based HTTP caches and Python's hash randomization feature.
 
 .. autofunction:: jsonify
 
@@ -505,7 +514,7 @@ Signals
 
 .. data:: signals_available
 
-   `True` if the signalling system is available.  This is the case
+   `True` if the signaling system is available.  This is the case
    when `blinker`_ is installed.
 
 .. data:: template_rendered
@@ -588,7 +597,7 @@ Signals
       do nothing but will fail with a :exc:`RuntimeError` for all other
       operations, including connecting.
 
-.. _blinker: http://pypi.python.org/pypi/blinker
+.. _blinker: https://pypi.python.org/pypi/blinker
 
 Class-Based Views
 -----------------
@@ -728,7 +737,7 @@ some defaults to :meth:`~flask.Flask.add_url_rule` or general behavior:
 
 -   `required_methods`: if this attribute is set, Flask will always add
     these methods when registering a URL rule even if the methods were
-    explicitly overriden in the ``route()`` call.
+    explicitly overridden in the ``route()`` call.
 
 Full example::
 
@@ -744,3 +753,30 @@ Full example::
 
 .. versionadded:: 0.8
    The `provide_automatic_options` functionality was added.
+
+Command Line Interface
+----------------------
+
+.. currentmodule:: flask.cli
+
+.. autoclass:: FlaskGroup
+   :members:
+
+.. autoclass:: ScriptInfo
+   :members:
+
+.. autofunction:: pass_script_info
+
+.. autofunction:: without_appcontext
+
+.. autofunction:: script_info_option
+
+   A special decorator that informs a click callback to be passed the
+   script info object as first argument.  This is normally not useful
+   unless you implement very special commands like the run command which
+   does not want the application to be loaded yet.  This can be combined
+   with the :func:`without_appcontext` decorator.
+
+.. autodata:: run_command
+
+.. autodata:: shell_command

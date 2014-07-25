@@ -5,7 +5,7 @@
 
     Tests the request context.
 
-    :copyright: (c) 2012 by Armin Ronacher.
+    :copyright: (c) 2014 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -31,6 +31,22 @@ class RequestContextTestCase(FlaskTestCase):
         ctx.push()
         self.assert_equal(buffer, [])
         ctx.pop()
+        self.assert_equal(buffer, [None])
+
+    def test_teardown_with_previous_exception(self):
+        buffer = []
+        app = flask.Flask(__name__)
+        @app.teardown_request
+        def end_of_request(exception):
+            buffer.append(exception)
+
+        try:
+            raise Exception('dummy')
+        except Exception:
+            pass
+
+        with app.test_request_context():
+            self.assert_equal(buffer, [])
         self.assert_equal(buffer, [None])
 
     def test_proper_test_request_context(self):
